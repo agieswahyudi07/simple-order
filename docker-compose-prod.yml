@@ -1,0 +1,48 @@
+services:
+  express:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: express
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - DOMAIN_NAME=${DOMAIN_NAME}
+      - SUBDOMAIN=${SUBDOMAIN}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.express.rule=Host(`${SUBDOMAIN}.${DOMAIN_NAME}`)
+      - traefik.http.routers.express.tls=true
+      - traefik.http.routers.express.entrypoints=web,websecure
+      - traefik.http.middlewares.express.headers.SSLRedirect=true
+      - traefik.http.middlewares.express.headers.STSSeconds=315360000
+      - traefik.http.middlewares.express.headers.browserXSSFilter=true
+      - traefik.http.middlewares.express.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.express.headers.forceSTSHeader=true
+      - traefik.http.middlewares.express.headers.STSIncludeSubdomains=true
+      - traefik.http.middlewares.express.headers.STSPreload=true
+      - traefik.http.routers.express.tls.certresolver=mytlschallenge
+      - traefik.http.routers.express.middlewares=express@docker
+    networks:
+      - traefik-network
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:6
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+volumes:
+  mongo_data:
+
+networks:
+  traefik-network:
+    external: true
