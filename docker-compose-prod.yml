@@ -1,9 +1,25 @@
 services:
+  mongodb:
+    image: mongo:6
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - traefik-network
+
+
   express:
     build:
       context: .
       dockerfile: Dockerfile.prod
     container_name: express
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
       - MONGODB_URI=${MONGODB_URI}
@@ -29,17 +45,6 @@ services:
     depends_on:
       - mongodb
 
-  mongodb:
-    image: mongo:6
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-    container_name: mongodb
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
 volumes:
   mongo_data:
 
