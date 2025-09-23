@@ -3,7 +3,7 @@
 API ini menyediakan manajemen **units**, **rooms**, dan **bookings** dengan autentikasi JWT.  
 
 Base URL:
-
+https://api-pln.agieswahyudi.my.id/api
 
 ---
 
