@@ -7,6 +7,10 @@ Base URL:
 
 ---
 
+Initial ACCOUNT 
+email : superadmin@pln.id
+password : superadminpassword
+
 ## Table of Contents
 
 - [Authentication](#authentication)
@@ -89,6 +93,7 @@ curl -X POST https://api-pln.agieswahyudi.my.id/api/bookings \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"unitId":"64f...","roomId":"64f...","date":"2025-09-25","startTime":"09:00","endTime":"11:00"}'
+
 
 
 
