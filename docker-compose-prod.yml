@@ -39,6 +39,7 @@ services:
       - traefik.http.middlewares.express.headers.STSIncludeSubdomains=true
       - traefik.http.middlewares.express.headers.STSPreload=true
       - traefik.http.routers.express.tls.certresolver=mytlschallenge
+      - traefik.http.services.express.loadbalancer.server.port=3000
       - traefik.http.routers.express.middlewares=express@docker
     networks:
       - traefik-network
