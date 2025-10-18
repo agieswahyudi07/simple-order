@@ -1,0 +1,41 @@
+services:
+  express:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017
+      - DATABASE_NAME=simpleorder
+      - JWT_SECRET=supersecretkey
+      - INITIALIZE_SUPERADMIN_NAME=Admin
+      - INITIALIZE_SUPERADMIN_EMAIL=admin@example.com
+      - INITIALIZE_SUPERADMIN_PASSWORD=admin123
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - express
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+volumes:
+  mongo_data:

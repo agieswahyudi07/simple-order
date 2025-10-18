@@ -1,0 +1,13 @@
+/* Tailwind entry - user requested single import */
+@import "tailwindcss";
+
+
+/* Basic defaults to ensure page looks decent before Tailwind processes */
+html, body, #app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
